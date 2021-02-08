@@ -16,7 +16,11 @@ class DishDetail extends Component {
             <li className="mb-2">{comment.comment}</li>
             <li>
               -- {comment.author}{" "}
-              {new Date(comment.date).toLocaleDateString("en-US", options)}
+              {new Intl.DateTimeFormat("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+              }).format(new Date(Date.parse(comment.date)))}
             </li>
           </ul>
         );
@@ -31,13 +35,15 @@ class DishDetail extends Component {
   renderDish(dish) {
     if (dish != null)
       return (
-        <Card>
-          <CardImg top src={dish.image} alt={dish.name} />
-          <CardBody>
-            <CardTitle>{dish.name}</CardTitle>
-            <CardText>{dish.description}</CardText>
-          </CardBody>
-        </Card>
+        <div className="container">
+          <Card>
+            <CardImg top src={dish.image} alt={dish.name} />
+            <CardBody>
+              <CardTitle>{dish.name}</CardTitle>
+              <CardText>{dish.description}</CardText>
+            </CardBody>
+          </Card>
+        </div>
       );
     else return <div></div>;
   }
