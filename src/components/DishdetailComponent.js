@@ -30,11 +30,11 @@ class CommentForm extends Component {
     this.state = {
       rating: "",
       author: "",
-      textarea: "",
+      comment: "",
       touched: {
         rating: false,
         author: false,
-        textarea: false,
+        comment: false,
       },
     };
 
@@ -72,7 +72,12 @@ class CommentForm extends Component {
 
   handleSubmit(values) {
     console.log("Current State is: " + JSON.stringify(values));
-    alert("Current State is: " + JSON.stringify(values));
+    this.props.addComment(
+      this.props.dishId,
+      values.rating,
+      values.author,
+      values.comment
+    );
     //event.preventDefault();
   }
 
@@ -157,16 +162,16 @@ class CommentForm extends Component {
                 </Row>
 
                 <Row className="form-group">
-                  <Label htmlFor="textarea" md={2}>
+                  <Label htmlFor="comment" md={2}>
                     <strong>Comment</strong>
                   </Label>
                 </Row>
                 <Row>
                   <Col md={10}>
                     <Control.textarea
-                      model=".textarea"
-                      id="textarea"
-                      name="textarea"
+                      model=".comment"
+                      id="comment"
+                      name="comment"
                       placeholder=" "
                       rows="6"
                       className="form-control"
@@ -176,7 +181,7 @@ class CommentForm extends Component {
                     />
                     <Errors
                       className="text-danger"
-                      model=".textarea"
+                      model=".comment"
                       show="touched"
                       messages={{
                         required: "Required",
@@ -228,7 +233,7 @@ function RenderCommentsOld({ comments }) {
   }
 }
 
-function RenderComments({ props }) {
+function RenderComments({ props, addComment, dishId }) {
   const allComments = props.comments.map((comment) => {
     return (
       <ul key={comment.id} className="list-unstyled">
@@ -249,7 +254,7 @@ function RenderComments({ props }) {
       <div>
         <h3>Comments</h3>
         {allComments}
-        <CommentForm props={props} />
+        <CommentForm props={props} dishId={dishId} addComment={addComment} />
       </div>
     );
   } else {
@@ -294,7 +299,11 @@ const DishDetail = (props) => {
             <RenderDish dish={props.dish} />
           </div>
           <div className="col-12 col-md-5 m-1">
-            <RenderComments props={props} />
+            <RenderComments
+              props={props}
+              addComment={props.addComment}
+              dishId={props.dish.id}
+            />
           </div>
         </div>
       </div>
